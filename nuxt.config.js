@@ -1,3 +1,6 @@
+require('dotenv').config()
+const { PROXY_URL } = process.env
+
 export default {
   mode: 'spa',
   /*
@@ -60,5 +63,8 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  env: {
+    PROXY_URL
   }
 }
