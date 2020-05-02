@@ -16,7 +16,7 @@
             {{ props.row.bid }}
           </b-table-column>
           <b-table-column field="datetime" label="更新日時" numeric>
-            {{ props.row.datetime }}
+            {{ $jpDateTime(props.row.datetime) }}
           </b-table-column>
         </template>
       </b-table>
