@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-field label="取引所">
+    <b-field :label="exchangeSelectorLabel">
       <b-select v-model="selectedExchange">
         <option v-for="option in exchangeOptions" :key="option" :value="option">
           {{ option }}
@@ -23,6 +23,7 @@ export default {
   },
   data() {
     return {
+      exchangeSelectorLabel: '取引所',
       selectedExchange: this.exchange,
       exchangeOptions: ccxt.exchanges
     }
