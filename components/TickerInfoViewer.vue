@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column is-narrow">
     <b-field :label="tickerInfoViewerLabel">
       <b-table :data="tickerInfo" :loading="isLoading" mobile-cards>
         <template slot-scope="props">
