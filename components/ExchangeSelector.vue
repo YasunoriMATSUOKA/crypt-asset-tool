@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="column is-narrow">
     <b-field :label="exchangeSelectorLabel">
       <b-select v-model="selectedExchange">
         <option v-for="option in jpyExchanges" :key="option" :value="option">
@@ -42,7 +42,7 @@ export default {
     }
   },
   created() {
-    this.$emit('initExchangeOptions', this.exchangeOptions)
+    this.$emit('initExchangeOptions', this.jpyExchanges)
   },
   methods: {
     exchangeObject(exchange) {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="column is-narrow">
     <b-field :label="tickerSelectorLabel">
       <b-select v-model="selectedTicker" :loading="isLoading">
         <option v-for="option in tickerOptions" :key="option" :value="option">
