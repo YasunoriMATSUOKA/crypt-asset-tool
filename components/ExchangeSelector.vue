@@ -25,7 +25,14 @@ export default {
     return {
       exchangeSelectorLabel: '取引所',
       selectedExchange: this.exchange,
-      exchangeOptions: ccxt.exchanges
+      allExchanges: ccxt.exchanges
+    }
+  },
+  computed: {
+    exchangeOptions() {
+      return this.allExchanges.filter((exchange) =>
+        this.hasEnoughMethods(exchange)
+      )
     }
   },
   watch: {
@@ -35,6 +42,29 @@ export default {
   },
   created() {
     this.$emit('initExchangeOptions', this.exchangeOptions)
+  },
+  methods: {
+    exchangeObject(exchange) {
+      return new ccxt[exchange]({
+        proxy: process.env.PROXY_URL
+      })
+    },
+    hasFetchMarkets(exchange) {
+      return this.exchangeObject(exchange).has.fetchMarkets
+    },
+    hasFetchTicker(exchange) {
+      return this.exchangeObject(exchange).has.fetchTicker
+    },
+    hasFetchOrderBook(exchange) {
+      return this.exchangeObject(exchange).has.fetchOrderBook
+    },
+    hasEnoughMethods(exchange) {
+      return (
+        this.hasFetchMarkets(exchange) &&
+        this.hasFetchTicker(exchange) &&
+        this.hasFetchOrderBook(exchange)
+      )
+    }
   }
 }
 </script>
