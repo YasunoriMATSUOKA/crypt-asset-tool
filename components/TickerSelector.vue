@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-field label="通貨">
+    <b-field :label="tickerSelectorLabel">
       <b-select v-model="selectedTicker" :loading="isLoading">
         <option v-for="option in tickerOptions" :key="option" :value="option">
           {{ option }}
@@ -27,6 +27,7 @@ export default {
   },
   data() {
     return {
+      tickerSelectorLabel: '通貨',
       selectedTicker: this.ticker,
       markets: [],
       isLoading: false
@@ -65,7 +66,12 @@ export default {
     async fetchMarkets() {
       if (this.exchange) {
         this.isLoading = true
-        this.markets = await this.selectedExchangeObject.fetchMarkets()
+        this.markets = await this.selectedExchangeObject
+          .fetchMarkets()
+          .catch((error) => {
+            this.$buefy.dialog.alert(error)
+            return []
+          })
         this.isLoading = false
       } else {
         this.markets = []

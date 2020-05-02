@@ -12,24 +12,27 @@
       @changeTickerOptions="onChangeTickerOptions"
       @changeMarkets="onChangeMarkets"
     ></TickerSelector>
+    <TickerInfoViewer :exchange="exchange" :ticker="ticker"></TickerInfoViewer>
   </div>
 </template>
 
 <script>
 import ExchangeSelector from '@/components/ExchangeSelector'
 import TickerSelector from '@/components/TickerSelector'
+import TickerInfoViewer from '@/components/TickerInfoViewer'
 
 export default {
   name: 'HomePage',
   components: {
     ExchangeSelector,
-    TickerSelector
+    TickerSelector,
+    TickerInfoViewer
   },
   data() {
     return {
-      exchange: 'zaif',
+      exchange: 'bitbank',
       exchangeOptions: [],
-      ticker: 'XEM/JPY',
+      ticker: 'BTC/JPY',
       tickerOptions: [],
       markets: []
     }

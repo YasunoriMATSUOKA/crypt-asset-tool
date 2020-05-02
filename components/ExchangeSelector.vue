@@ -2,7 +2,7 @@
   <div>
     <b-field :label="exchangeSelectorLabel">
       <b-select v-model="selectedExchange">
-        <option v-for="option in exchangeOptions" :key="option" :value="option">
+        <option v-for="option in jpyExchanges" :key="option" :value="option">
           {{ option }}
         </option>
       </b-select>
@@ -25,7 +25,8 @@ export default {
     return {
       exchangeSelectorLabel: '取引所',
       selectedExchange: this.exchange,
-      allExchanges: ccxt.exchanges
+      allExchanges: ccxt.exchanges,
+      jpyExchanges: ['bitbank', 'bitflyer', 'coincheck', 'liquid', 'zaif']
     }
   },
   computed: {
