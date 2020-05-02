@@ -11,8 +11,6 @@
 </template>
 
 <script>
-const ccxt = require('ccxt')
-
 export default {
   name: 'TickerSelector',
   props: {
@@ -34,15 +32,8 @@ export default {
     }
   },
   computed: {
-    selectedExchangeObject() {
-      return new ccxt[this.exchange]({
-        proxy: process.env.PROXY_URL
-      })
-    },
     tickerOptions() {
-      return this.markets.length > 0
-        ? this.markets.map((market) => market.symbol)
-        : []
+      return this.$marketsToTickerOptions(this.markets)
     }
   },
   watch: {
@@ -64,18 +55,19 @@ export default {
   },
   methods: {
     async fetchMarkets() {
-      if (this.exchange) {
-        this.isLoading = true
-        this.markets = await this.selectedExchangeObject
-          .fetchMarkets()
-          .catch((error) => {
-            this.$buefy.dialog.alert(error)
-            return []
-          })
+      this.isLoading = true
+      this.markets = await this.$fetchMarkets(this.exchange).catch((error) => {
         this.isLoading = false
-      } else {
-        this.markets = []
-      }
+        this.$buefy.notification.open({
+          duration: 5000,
+          message: `fetchMarkets failed in TickerSelector component! ${error}`,
+          position: 'is-bottom-right',
+          type: 'is-danger',
+          hasIcon: true
+        })
+        return []
+      })
+      this.isLoading = false
     }
   }
 }

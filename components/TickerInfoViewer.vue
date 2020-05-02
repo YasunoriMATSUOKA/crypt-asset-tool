@@ -25,8 +25,6 @@
 </template>
 
 <script>
-const ccxt = require('ccxt')
-
 export default {
   name: 'TickerInfoViewer',
   props: {
@@ -42,18 +40,9 @@ export default {
   data() {
     return {
       tickerInfoViewerLabel: '価格情報',
-      selectedExchange: this.exchange,
-      selectedTicker: this.ticker,
       tickerInfo: [],
       isLoading: false,
       isValidExchangeAndTicker: false
-    }
-  },
-  computed: {
-    selectedExchangeObject() {
-      return new ccxt[this.exchange]({
-        proxy: process.env.PROXY_URL
-      })
     }
   },
   watch: {
@@ -70,31 +59,20 @@ export default {
   methods: {
     async fetchTickerInfo() {
       this.isLoading = true
-      if (this.selectedExchange && this.selectedTicker) {
-        const markets = await this.selectedExchangeObject.fetchMarkets()
-        const hasTicker =
-          markets.filter((market) => market.symbol === this.ticker).length > 0
-        if (hasTicker) {
-          this.isValidExchangeAndTicker = true
-        } else {
-          this.isValidExchangeAndTicker = false
-          this.tickerInfo = []
-          this.isLoading = false
-          return
-        }
-      } else {
-        this.isValidExchangeAndTicker = false
-        this.tickerInfo = []
+      this.tickerInfo[0] = await this.$fetchTicker(
+        this.exchange,
+        this.ticker
+      ).catch((error) => {
         this.isLoading = false
-        return
-      }
-      this.tickerInfo[0] = await this.selectedExchangeObject
-        .fetchTicker(this.ticker)
-        .catch((error) => {
-          this.$buefy.dialog.alert(error)
-          this.tickerInfo = []
-          this.isLoading = false
+        this.$buefy.notification.open({
+          duration: 5000,
+          message: `fetchTickerInfo failed in TickerInfoViewer component! ${error}`,
+          position: 'is-bottom-right',
+          type: 'is-danger',
+          hasIcon: true
         })
+        return {}
+      })
       this.isLoading = false
     }
   }
