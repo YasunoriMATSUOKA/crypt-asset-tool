@@ -1,18 +1,25 @@
 <template>
   <div>
-    <ExchangeSelector
-      :exchange="exchange"
-      @changeExchange="onChangeExchange"
-      @initExchangeOptions="onInitExchangeOptions"
-    ></ExchangeSelector>
-    <TickerSelector
-      :exchange="exchange"
-      :ticker="ticker"
-      @changeTicker="onChangeTicker"
-      @changeTickerOptions="onChangeTickerOptions"
-      @changeMarkets="onChangeMarkets"
-    ></TickerSelector>
-    <TickerInfoViewer :exchange="exchange" :ticker="ticker"></TickerInfoViewer>
+    <div class="columns">
+      <ExchangeSelector
+        :exchange="exchange"
+        @changeExchange="onChangeExchange"
+        @initExchangeOptions="onInitExchangeOptions"
+      ></ExchangeSelector>
+      <TickerSelector
+        :exchange="exchange"
+        :ticker="ticker"
+        @changeTicker="onChangeTicker"
+        @changeTickerOptions="onChangeTickerOptions"
+        @changeMarkets="onChangeMarkets"
+      ></TickerSelector>
+    </div>
+    <div class="columns">
+      <TickerInfoViewer
+        :exchange="exchange"
+        :ticker="ticker"
+      ></TickerInfoViewer>
+    </div>
   </div>
 </template>
 
