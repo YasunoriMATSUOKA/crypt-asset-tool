@@ -39,11 +39,20 @@ const fetchMarkets = async (exchange) => {
     return []
   }
 }
-const marketsToTickerOptions = (markets) =>
-  markets.length > 0 ? markets.map((market) => market.symbol) : []
+const filterJpyMarkets = (markets) => {
+  return markets.length > 0
+    ? markets.filter((market) => market.quote === 'JPY')
+    : []
+}
+const marketsToTickerOptions = (markets) => {
+  return markets.length > 0
+    ? filterJpyMarkets(markets).map((market) => market.symbol)
+    : []
+}
 const isValidCombinationOfExchangeAndTicker = async (exchange, ticker) => {
   const markets = await fetchMarkets(exchange)
-  if (markets.length > 0) {
+  const jpyMarkets = filterJpyMarkets(markets)
+  if (jpyMarkets.length > 0) {
     return markets.filter((market) => market.symbol === ticker).length > 0
   } else {
     return false
@@ -71,6 +80,7 @@ export default ({ app }, inject) => {
   inject('enoughMethodsExchanges', enoughMethodsExchanges)
   inject('jpyExchanges', jpyExchanges)
   inject('fetchMarkets', fetchMarkets)
+  inject('filterJpyMarkets', filterJpyMarkets)
   inject('marketsToTickerOptions', marketsToTickerOptions)
   inject('fetchTicker', fetchTicker)
 }
