@@ -20,6 +20,7 @@
     "ccxt": "^1.27.12",
     "date-fns": "^2.12.0",
     "date-fns-tz": "^1.0.10",
+    "dexie": "^3.0.0",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^7.0.0",
     "nuxt": "^2.0.0",

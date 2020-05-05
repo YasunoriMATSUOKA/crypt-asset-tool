@@ -47,6 +47,11 @@ export default {
           title: 'Home',
           icon: 'home',
           to: { name: 'index' }
+        },
+        {
+          title: 'Config',
+          icon: 'cog',
+          to: { name: 'config' }
         }
       ]
     }

@@ -30,7 +30,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/date-fns-tz.js', '~/plugins/ccxt.js'],
+  plugins: [
+    '~/plugins/date-fns-tz.js',
+    '~/plugins/ccxt.js',
+    '~/plugins/dexie.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
