@@ -2,22 +2,23 @@
   <div>
     <div class="columns">
       <ExchangeSelector
-        :exchange="exchange"
+        :exchange="selectedExchange"
         @changeExchange="onChangeExchange"
       ></ExchangeSelector>
     </div>
     <div class="columns">
       <ApiKeyInput
-        :api-key="apiKey"
+        :api-key="inputApiKey"
         @changeApiKey="onChangeApiKey"
       ></ApiKeyInput>
       <ApiSecretInput
-        :api-secret="apiSecret"
+        :api-secret="inputApiSecret"
         @changeApiSecret="onChangeApiSecret"
       ></ApiSecretInput>
     </div>
     <div class="columns">
       <ApiSaveButton @clickSaveApi="onClickSaveApi"></ApiSaveButton>
+      <ApiDeleteButton @clickDeleteApi="onClickDeleteApi"></ApiDeleteButton>
     </div>
   </div>
 </template>
@@ -27,6 +28,7 @@ import ExchangeSelector from '@/components/ExchangeSelector'
 import ApiKeyInput from '@/components/ApiKeyInput'
 import ApiSecretInput from '@/components/ApiSecretInput'
 import ApiSaveButton from '@/components/ApiSaveButton'
+import ApiDeleteButton from '@/components/ApiDeleteButton'
 
 export default {
   name: 'ApiConfig',
@@ -34,7 +36,8 @@ export default {
     ExchangeSelector,
     ApiKeyInput,
     ApiSecretInput,
-    ApiSaveButton
+    ApiSaveButton,
+    ApiDeleteButton
   },
   props: {
     exchange: {
@@ -67,19 +70,48 @@ export default {
     onChangeApiSecret(inputApiSecret) {
       this.inputApiSecret = inputApiSecret
     },
+    clearApi() {
+      this.inputApiKey = ''
+      this.inputApiSecret = ''
+    },
     async onClickSaveApi() {
-      await this.$setApiKeyAndApiSecret(
-        this.selectedExchange,
-        this.inputApiSecret,
-        this.inputApiSecret
-      )
-      const exchange = await this.$getApiKeyAndApiSecret(this.selectedExchange)
-      this.$buefy.notification.open({
-        message: `以下のAPI情報をローカルストレージに保存しました。${JSON.stringify(
-          exchange
-        )}`,
-        type: 'is-success'
-      })
+      try {
+        await this.$setExchange(
+          this.selectedExchange,
+          this.inputApiKey,
+          this.inputApiSecret
+        )
+        const exchange = await this.$getExchange(this.selectedExchange)
+        this.$buefy.notification.open({
+          message: `API情報のローカルストレージへの保存に成功しました。${JSON.stringify(
+            exchange
+          )}`,
+          type: 'is-success'
+        })
+      } catch (error) {
+        this.$buefy.notification.open({
+          message: `API情報のローカルストレージへの保存に失敗しました。${JSON.stringify(
+            error
+          )}`,
+          type: 'is-danger'
+        })
+      }
+    },
+    async onClickDeleteApi() {
+      try {
+        await this.$deleteExchange(this.selectedExchange)
+        this.$buefy.notification.open({
+          message: `API情報のローカルストレージからの削除に成功しました。${this.selectedExchange}`,
+          type: 'is-success'
+        })
+      } catch (error) {
+        this.$buefy.notification.open({
+          message: `API情報のローカルストレージからの削除に失敗しました。${JSON.stringify(
+            error
+          )}`,
+          type: 'is-danger'
+        })
+      }
     }
   }
 }

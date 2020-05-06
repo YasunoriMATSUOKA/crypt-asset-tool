@@ -1,19 +1,19 @@
 const ccxt = require('ccxt')
 
 const allExchanges = () => ccxt.exchanges
-const exchangeObject = (exchange) => {
+const publicExchangeObject = (exchange) => {
   return new ccxt[exchange]({
     proxy: process.env.PROXY_URL
   })
 }
 const hasFetchMarkets = (exchange) => {
-  return exchangeObject(exchange).has.fetchMarkets
+  return publicExchangeObject(exchange).has.fetchMarkets
 }
 const hasFetchTicker = (exchange) => {
-  return exchangeObject(exchange).has.fetchTicker
+  return publicExchangeObject(exchange).has.fetchTicker
 }
 const hasFetchOrderBook = (exchange) => {
-  return exchangeObject(exchange).has.fetchOrderBook
+  return publicExchangeObject(exchange).has.fetchOrderBook
 }
 const hasEnoughMethods = (exchange) => {
   return (
@@ -34,7 +34,7 @@ const jpyExchanges = () => [
 ]
 const fetchMarkets = async (exchange) => {
   if (exchange && hasFetchMarkets(exchange)) {
-    return await exchangeObject(exchange).fetchMarkets()
+    return await publicExchangeObject(exchange).fetchMarkets()
   } else {
     return []
   }
@@ -64,7 +64,7 @@ const fetchTicker = async (exchange, ticker) => {
     ticker
   )
   if (tempIsValidExchangeAndTicker && hasFetchTicker(exchange)) {
-    return await exchangeObject(exchange).fetchTicker(ticker)
+    return await publicExchangeObject(exchange).fetchTicker(ticker)
   } else {
     return {}
   }
@@ -72,7 +72,7 @@ const fetchTicker = async (exchange, ticker) => {
 
 export default ({ app }, inject) => {
   inject('allExchanges', allExchanges)
-  inject('exchangeObject', exchangeObject)
+  inject('publicExchangeObject', publicExchangeObject)
   inject('hasFetchMarkets', hasFetchMarkets)
   inject('hasFetchTicker', hasFetchTicker)
   inject('hasFetchOrderBook', hasFetchOrderBook)

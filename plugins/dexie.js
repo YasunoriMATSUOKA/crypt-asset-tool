@@ -1,11 +1,11 @@
 import Dexie from 'dexie'
 
-const setApiKeyAndApiSecret = async (exchangeId, apiKey, apiSecret) => {
-  const exchangeDb = new Dexie('ExchangeDatabase')
-  exchangeDb.version(1).stores({ exchange: '&id,apiKey,apiSecret' })
-  await exchangeDb.exchange
+const setExchange = async (id, apiKey, apiSecret) => {
+  const cryptAssetToolDb = new Dexie('CryptAssetToolDatabase')
+  cryptAssetToolDb.version(1).stores({ exchanges: '&id,apiKey,apiSecret' })
+  await cryptAssetToolDb.exchanges
     .put({
-      id: exchangeId,
+      id,
       apiKey,
       apiSecret
     })
@@ -13,16 +13,26 @@ const setApiKeyAndApiSecret = async (exchangeId, apiKey, apiSecret) => {
       alert(error.stack || error)
     })
 }
-const getApiKeyAndApiSecret = async (exchangeId) => {
-  const exchangeDb = new Dexie('ExchangeDatabase')
-  exchangeDb.version(1).stores({ exchange: '&id,apiKey,apiSecret' })
-  const allExchanges = await exchangeDb.exchange.toArray().catch((error) => {
+const deleteExchange = async (id) => {
+  const cryptAssetToolDb = new Dexie('CryptAssetToolDatabase')
+  cryptAssetToolDb.version(1).stores({ exchanges: '&id,apiKey,apiSecret' })
+  await cryptAssetToolDb.exchanges.delete(id).catch((error) => {
     alert(error.stack || error)
   })
-  return allExchanges.find((exchange) => exchange.id === exchangeId)
+}
+const getExchange = async (id) => {
+  const cryptAssetToolDb = new Dexie('CryptAssetToolDatabase')
+  cryptAssetToolDb.version(1).stores({ exchanges: '&id,apiKey,apiSecret' })
+  const allExchanges = await cryptAssetToolDb.exchanges
+    .toArray()
+    .catch((error) => {
+      alert(error.stack || error)
+    })
+  return allExchanges.find((exchange) => exchange.id === id)
 }
 
 export default ({ app }, inject) => {
-  inject('setApiKeyAndApiSecret', setApiKeyAndApiSecret)
-  inject('getApiKeyAndApiSecret', getApiKeyAndApiSecret)
+  inject('setExchange', setExchange)
+  inject('deleteExchange', deleteExchange)
+  inject('getExchange', getExchange)
 }

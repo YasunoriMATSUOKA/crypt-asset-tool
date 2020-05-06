@@ -3,19 +3,19 @@
     <b-field :label="tickerInfoViewerLabel">
       <b-table :data="tickerInfo" :loading="isLoading" mobile-cards>
         <template slot-scope="props">
-          <b-table-column field="symbol" label="通貨">
+          <b-table-column field="symbol" :label="tableLabelSymbol">
             {{ props.row.symbol }}
           </b-table-column>
-          <b-table-column field="last" label="最新価格" numeric>
+          <b-table-column field="last" :label="tableLabelLast" numeric>
             {{ props.row.last }}
           </b-table-column>
-          <b-table-column field="ask" label="ASK" numeric>
+          <b-table-column field="ask" :label="tableLabelAsk" numeric>
             {{ props.row.ask }}
           </b-table-column>
-          <b-table-column field="bid" label="BID" numeric>
+          <b-table-column field="bid" :label="tableLabelBid" numeric>
             {{ props.row.bid }}
           </b-table-column>
-          <b-table-column field="datetime" label="更新日時" numeric>
+          <b-table-column field="datetime" :label="tableLabelDatetime" numeric>
             {{ $jpDateTime(props.row.datetime) }}
           </b-table-column>
         </template>
@@ -40,6 +40,11 @@ export default {
   data() {
     return {
       tickerInfoViewerLabel: '価格情報',
+      tableLabelSymbol: '通貨',
+      tableLabelLast: '最新価格',
+      tableLabelAsk: 'ASK',
+      tableLabelBid: 'BID',
+      tableLabelDatetime: '更新日時',
       tickerInfo: [],
       isLoading: false,
       isValidExchangeAndTicker: false
